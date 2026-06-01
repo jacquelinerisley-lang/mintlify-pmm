@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mintlify PMM Assignment</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #09090b;
+    --bg-card: #111113;
+    --bg-raised: #18181b;
+    --border: rgba(255,255,255,0.07);
+    --border-mid: rgba(255,255,255,0.12);
+    --mint: #7c3aed;
+    --mint-soft: rgba(124,58,237,0.12);
+    --mint-glow: rgba(124,58,237,0.3);
+    --green: #4ade80;
+    --green-soft: rgba(74,222,128,0.1);
+    --amber: #fbbf24;
+    --amber-soft: rgba(251,191,36,0.1);
+    --rose: #f87171;
+    --rose-soft: rgba(248,113,113,0.1);
+    --sky: #38bdf8;
+    --sky-soft: rgba(56,189,248,0.1);
+    --text: #fafafa;
+    --text-2: #a1a1aa;
+    --text-3: #71717a;
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(9,9,11,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+
+  .nav-logo span {
+    color: var(--text);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    text-decoration: none;
+    transition: all 0.15s;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text);
+    background: var(--bg-raised);
+  }
+
+  .nav-links a .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--mint);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .nav-links a.active .dot { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--border-mid);
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-2);
+    margin-bottom: 32px;
+    text-transform: uppercase;
+  }
+
+  .hero-eyebrow span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 860px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--text-2);
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text-2);
+    max-width: 480px;
+    line-height: 1.65;
+    margin-bottom: 48px;
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--text-2);
+    transition: border-color 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+
+  .meta-pill:hover {
+    border-color: var(--border-mid);
+    color: var(--text);
+  }
+
+  .meta-pill .icon {
+    font-size: 15px;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    font-family: 'DM Mono', monospace;
+    animation: bob 2.5s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  .scroll-hint svg { color: var(--text-3); }
+
+  /* SECTION STRUCTURE */
+  section {
+    padding: 100px 40px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 64px;
+  }
+
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-3);
+    letter-spacing: 0.1em;
+    padding-top: 8px;
+    min-width: 28px;
+  }
+
+  .section-title-block h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  .section-title-block p {
+    font-size: 16px;
+    color: var(--text-2);
+    max-width: 540px;
+    line-height: 1.65;
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: var(--border-mid); }
+
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 10px;
+  }
+
+  .card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .card p, .card li {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  .card ul { padding-left: 16px; }
+  .card ul li { margin-bottom: 6px; }
+
+  /* GRID LAYOUTS */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+  /* ACCENT CARDS */
+  .card-accent-mint { border-color: var(--mint-glow); background: linear-gradient(135deg, var(--bg-card), rgba(124,58,237,0.05)); }
+  .card-accent-green { border-color: rgba(74,222,128,0.2); background: linear-gradient(135deg, var(--bg-card), rgba(74,222,128,0.04)); }
+  .card-accent-amber { border-color: rgba(251,191,36,0.2); background: linear-gradient(135deg, var(--bg-card), rgba(251,191,36,0.04)); }
+  .card-accent-sky { border-color: rgba(56,189,248,0.2); background: linear-gradient(135deg, var(--bg-card), rgba(56,189,248,0.04)); }
+
+  .accent-mint { color: #a78bfa; }
+  .accent-green { color: var(--green); }
+  .accent-amber { color: var(--amber); }
+  .accent-sky { color: var(--sky); }
+  .accent-rose { color: var(--rose); }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--mint), rgba(124,58,237,0.1));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 36px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--mint);
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+  }
+
+  .timeline-item.done::before {
+    background: var(--mint);
+  }
+
+  .timeline-phase {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 4px;
+  }
+
+  .timeline-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .timeline-item p {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.65;
+  }
+
+  /* BIG STAT */
+  .stat-block {
+    text-align: center;
+    padding: 32px 24px;
+  }
+
+  .stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+    max-width: 160px;
+    margin: 0 auto;
+  }
+
+  /* POSITIONING BLOCK */
+  .positioning-box {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-lg);
+    padding: 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .positioning-box::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 32px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 180px;
+    color: rgba(124,58,237,0.08);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .positioning-box blockquote {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    font-style: italic;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .positioning-box .source {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--text-3);
+    text-transform: uppercase;
+  }
+
+  /* TABLE */
+  .objection-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .objection-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .objection-table td {
+    padding: 16px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .objection-table td:first-child {
+    color: var(--rose);
+    font-weight: 600;
+    font-size: 13px;
+    width: 30%;
+  }
+
+  .objection-table td:last-child {
+    color: var(--text-2);
+    font-size: 13px;
+  }
+
+  .objection-table tr:last-child td { border-bottom: none; }
+
+  /* BADGE */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .badge-mint { background: var(--mint-soft); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+  .badge-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+  .badge-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+  .badge-sky { background: var(--sky-soft); color: var(--sky); border: 1px solid rgba(56,189,248,0.2); }
+
+  /* FEATURE ROW */
+  .feature-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .feature-row:last-child { border-bottom: none; }
+
+  .feature-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .feature-icon.mint { background: var(--mint-soft); }
+  .feature-icon.green { background: var(--green-soft); }
+  .feature-icon.amber { background: var(--amber-soft); }
+  .feature-icon.sky { background: var(--sky-soft); }
+
+  .feature-content h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .feature-content p {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.65;
+  }
+
+  /* LAUNCH CHECKLIST */
+  .checklist { list-style: none; }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+
+  .checklist li:last-child { border-bottom: none; }
+
+  .checklist li .check {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    background: var(--green-soft);
+    border: 1px solid rgba(74,222,128,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--green);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* COMPETITIVE TABLE */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .comp-table th {
+    padding: 12px 14px;
+    text-align: center;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .comp-table th:first-child { text-align: left; }
+
+  .comp-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-2);
+  }
+
+  .comp-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .comp-table .mintlify-row { background: rgba(124,58,237,0.04); }
+  .comp-table .mintlify-row td:first-child { color: #a78bfa; }
+
+  .check-y { color: var(--green); }
+  .check-n { color: var(--text-3); }
+  .check-p { color: var(--amber); }
+
+  /* FOOTER */
+  footer {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-left h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-style: italic;
+    margin-bottom: 4px;
+  }
+
+  .footer-left p {
+    font-size: 13px;
+    color: var(--text-3);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* TWO-COL LAYOUT */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .two-col-wide {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--mint-soft);
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #c4b5fd;
+  }
+
+  .callout strong {
+    color: #a78bfa;
+    font-weight: 700;
+  }
+
+  /* SUB-SECTION HEADER */
+  .sub-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sub-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* STACK */
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    height: 4px;
+    border-radius: 100px;
+    background: var(--bg-raised);
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--mint), #a78bfa);
+    transition: width 1s ease;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 12px 20px; }
+    .nav-links { display: none; }
+    section { padding: 80px 20px; }
+    .grid-2, .grid-3, .two-col, .two-col-wide { grid-template-columns: 1fr; }
+    .positioning-box { padding: 28px 24px; }
+    .positioning-box::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect width="20" height="20" rx="5" fill="#7c3aed"/><path d="M5 14V7l5 4 5-4v7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>Mintlify</span> / PMM Assignment
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#category" onclick="setActive(this)"><span class="dot"></span>Category Creation</a></li>
+    <li><a href="#capture" onclick="setActive(this)"><span class="dot"></span>Capture Interest</a></li>
+    <li><a href="#sales" onclick="setActive(this)"><span class="dot"></span>Sales Enablement</a></li>
+    <li><a href="#plan" onclick="setActive(this)"><span class="dot"></span>30·60·90</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <span></span>
+    Take-home assignment · Product Marketing Manager
+  </div>
+  <h1>From docs platform<br/><em>to knowledge infrastructure</em></h1>
+  <p class="hero-sub">A go-to-market strategy for Mintlify's move upmarket — category creation, demand capture, and sales enablement.</p>
+  <p style="font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 24px;">Jackie Risley</p>
+  <div class="hero-meta">
+    <a href="#category" class="meta-pill" style="text-decoration: none;"><span class="icon">🏷️</span> Category Creation</a>
+    <a href="#capture" class="meta-pill" style="text-decoration: none;"><span class="icon">📡</span> Capture Interest</a>
+    <a href="#sales" class="meta-pill" style="text-decoration: none;"><span class="icon">🎯</span> Sales Enablement</a>
+  </div>
+  <div class="scroll-hint">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M3 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    scroll
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- EXECUTIVE SUMMARY -->
+<section style="padding: 60px 40px;">
+  <div style="max-width: 1120px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: 200px 1fr; gap: 64px; align-items: start;">
+      <div>
+        <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px;">Executive summary</p>
+        <div style="width: 32px; height: 2px; background: var(--mint); border-radius: 2px;"></div>
+      </div>
+      <div>
+        <p style="font-size: 17px; line-height: 1.75; color: var(--text-2); margin-bottom: 20px;">Mintlify has earned its position as the default documentation platform for developer-first startups — but the opportunity in front of it is structurally different. The rise of AI agents as first-class consumers of product knowledge has created a new category that no incumbent owns and no analyst has yet named. That category is <strong style="color: var(--text);">AI Knowledge Infrastructure</strong>, and Mintlify is best positioned to define it.</p>
+        <p style="font-size: 17px; line-height: 1.75; color: var(--text-2); margin-bottom: 20px;">This document outlines a three-part strategy for making that transition. First, a disciplined approach to category creation — establishing the vocabulary, building analyst relationships, and earning formal recognition on a realistic 18–30 month timeline. Second, a cross-functional model for capturing enterprise interest through product launches and campaigns that connect Product, Demand, and Sales around a consistent message. Third, the sales enablement infrastructure needed to help an enterprise-facing Sales team speak credibly to a more skeptical, more senior buyer: CPOs, CTOs, VPs of Engineering, and Directors of Developer Experience.</p>
+        <p style="font-size: 17px; line-height: 1.75; color: var(--text-2);">These three pillars are not independent workstreams. Every analyst briefing sharpens the enterprise positioning. Every enterprise win gives analysts a proof point. Every sales call surfaces the objections that improve the messaging. The strategy is designed to compound — and the 30·60·90 plan at the end of this document shows how it starts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTEXT STRIP -->
+<section style="padding: 60px 40px;">
+  <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px 48px;">
+    <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 20px;">The situation</p>
+    <div class="grid-3" style="gap: 40px;">
+      <div>
+        <div style="font-size: 28px; font-family: 'Instrument Serif', serif; margin-bottom: 6px;">Where Mintlify is</div>
+        <p style="font-size: 14px; color: var(--text-2); line-height: 1.7;">The default docs platform for developer-first startups. 100M+ developers a year, 20,000+ customers, trusted by Anthropic, Coinbase, Perplexity. Product-led, beloved by EPD teams.</p>
+      </div>
+      <div>
+        <div style="font-size: 28px; font-family: 'Instrument Serif', serif; margin-bottom: 6px;">Where Mintlify is going</div>
+        <p style="font-size: 14px; color: var(--text-2); line-height: 1.7;">Knowledge infrastructure for the enterprise. From helping startups publish docs to helping organizations make their product knowledge available to every AI system that matters.</p>
+      </div>
+      <div>
+        <div style="font-size: 28px; font-family: 'Instrument Serif', serif; margin-bottom: 6px;">The market window</div>
+        <p style="font-size: 14px; color: var(--text-2); line-height: 1.7;">No analyst category exists yet for AI knowledge infrastructure. Nearly half of all docs traffic is now AI agents. The category is forming — and Mintlify can define it before anyone else does.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION 1: CATEGORY CREATION -->
+<section id="category">
+  <div class="section-header">
+    <div class="section-number">01</div>
+    <div class="section-title-block">
+      <h2>Category creation</h2>
+      <p>How to earn a named spot in a Gartner or Forrester report.</p>
+    </div>
+  </div>
+
+  <!-- Thesis -->
+  <div class="positioning-box" style="margin-bottom: 48px;">
+    <blockquote>
+      Mintlify needs to own the strategic narrative for elevating "AI Knowledge Infrastructure" from a documentation platform or publishing tool that is a component of larger solutions to a critical system layer.
+    </blockquote>
+    <div class="source">Core strategic premise</div>
+  </div>
+
+  <!-- What analysts need -->
+  <div style="margin-bottom: 48px;">
+    <p class="sub-header">What analysts need to create a category worthy of an MQ or Wave</p>
+    <div class="grid-3" style="gap: 20px;">
+      <div class="card card-accent-mint">
+        <div class="card-label">Requirement 01</div>
+        <h3 class="accent-mint">A defensible category definition</h3>
+        <p>Analysts cover markets, not features. The category needs a clear problem statement and a specific set of capabilities that define what is in and what is out. "AI Knowledge Infrastructure" frames Mintlify as the system layer — not the publishing tool — and must be defined tightly enough that analysts can apply it consistently across vendors.</p>
+      </div>
+      <div class="card card-accent-amber">
+        <div class="card-label">Requirement 02</div>
+        <h3 class="accent-amber">Enterprise revenue signals</h3>
+        <p>Gartner covers markets where enterprises are making large, standalone investments. Named enterprises with significant contracts — outside of bundled platform plays — are the primary signal that a category has real buying behavior behind it. Without this, analysts see a feature, not a market.</p>
+      </div>
+      <div class="card card-accent-green">
+        <div class="card-label">Requirement 03</div>
+        <h3 class="accent-green">5–7 viable named vendors</h3>
+        <p>Analysts don't build reports for a single company. There must be at least 5–7 vendors offering a product that fits the category definition and winning meaningful enterprise deals. This means Mintlify benefits from naming the category broadly enough to include adjacent players — while positioning itself firmly at the top.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MQs not realistic short-term -->
+  <div style="margin-bottom: 48px;">
+    <p class="sub-header">MQs and Waves are not realistic or desirable short-term (1–2 year) goals</p>
+    <div class="grid-3" style="gap: 16px;">
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">🔍</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Analysts currently misunderstand the space</h3>
+        <p>Gartner and Forrester currently see AI Knowledge Infrastructure as a subset or component of a larger framework — not a standalone category. Appearing in an MQ or Wave before that framing shifts could cement the wrong perception and be used to minimize Mintlify's position.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">📉</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">A small dot in the lower left does more harm than good</h3>
+        <p>MQ and Wave placement requires broad capabilities and global revenue scale. A low placement would be used by competitors and skeptical buyers to discredit Mintlify at exactly the moment it is trying to establish category leadership. Timing matters as much as inclusion.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">💼</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Analysts are prioritizing consulting over exhaustive reports</h3>
+        <p>Gartner and Forrester are shifting focus toward their more profitable consulting businesses. New MQs and Waves require overwhelming market signal to justify the investment. The smarter near-term path is building the relationships and data that make Mintlify the obvious choice when that report eventually gets created.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Realistic short-term goals -->
+  <div style="margin-bottom: 48px;">
+    <p class="sub-header">Realistic short-term goals and how to measure them (within ~1 year)</p>
+    <div class="two-col" style="gap: 20px;">
+      <div class="card card-accent-mint">
+        <h3 style="font-size: 15px; margin-bottom: 16px; color: #a78bfa;">Presence & visibility</h3>
+        <ul>
+          <li>Get first-page listing on Gartner Peer Reviews to demonstrate market presence to analysts</li>
+          <li>Appear in a Voice of the Customer Report to demonstrate market leadership</li>
+          <li>Use inquiries to identify opportunities to be included in market reports and niche overviews</li>
+          <li>Gain credibility to be featured in Cool Vendor or Hype Cycle reports</li>
+        </ul>
+      </div>
+      <div class="card card-accent-green">
+        <h3 style="font-size: 15px; margin-bottom: 16px; color: var(--green);">Influence & relationship</h3>
+        <ul>
+          <li>Provide such strong content and insights during analyst interactions that we inspire the creation of shorter-form reports on AI Knowledge Infrastructure</li>
+          <li>Create owned research analysts can use as a primary reference point — an annual "State of AI Knowledge Infrastructure" report with original data on AI vs. human traffic patterns</li>
+          <li>Document and track instances of analysts discussing Mintlify in customer conversations (measurable through your account rep)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="two-col" style="gap: 64px; margin-bottom: 48px;">
+    <div>
+    <p class="sub-header">Timeline to analyst coverage</p>
+      <div class="timeline">
+        <div class="timeline-item done">
+          <div class="timeline-phase">Now → Month 3</div>
+          <h4>Seed the language</h4>
+          <p>Brief key analysts on the category vision (not the product) and provide data from Mintlify's experience to support it. Get "AI knowledge infrastructure" into 5+ tier-1 tech media pieces and amplify with SEO/AEO and social media to establish the vocabulary before competitors do. Analyst briefings are free — they want to hear from category creators.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Month 3 → Month 9</div>
+          <h4>Build the analyst relationship</h4>
+          <p>Quarterly updates to priority analysts at Gartner and Forrester. Invite them to customer advisory board sessions. Provide unpublished data from Mintlify's traffic analytics. Use inquiries to solidify the relationship and gain knowledge that can enhance product, sales, and marketing efforts. Sponsor an analyst webinar on the AI agent experience — co-branded, not a commercial. First analyst mentions typically appear in passing coverage of adjacent categories.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Month 9 → Month 18</div>
+          <h4>Enterprise proof points</h4>
+          <p>Name enterprise customers in press. Get 3+ customers to participate in analyst reference calls. Hit $5M ARR from deals &gt; $50K. Qualify for Gartner Peer Insights listing for the category. At this stage, Mintlify starts showing up in inquiry responses when enterprises ask analysts "what should we use for knowledge infrastructure" — and analysts begin proactively recommending knowledge infrastructure to their clients. Track this through your account rep.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Month 18 → Month 30</div>
+          <h4>First formal report inclusion</h4>
+          <p>The realistic path to a Gartner Market Guide (the precursor to a Magic Quadrant) is 18–24 months from first briefing. A Forrester Wave requires broader market maturity — more likely at 24–36 months. The goal isn't to rush a quadrant; it's to be the reference point when analysts write the first "note" on the category, which typically happens within 18 months of consistent engagement.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card" style="background: var(--bg-raised);">
+        <p class="sub-header" style="margin-bottom: 16px;">Priority analyst targets</p>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-icon mint">📊</div>
+          <div class="feature-content">
+            <h4>Gartner: Content Services & KM</h4>
+            <p>The "Content Services Platforms" and "Knowledge Management" coverage areas are the most adjacent. Target analysts covering the digital workplace and AI infrastructure. Key names: Thomas Murphy, Manju Bhat, Afraz Jaffri, Joe Antelmi, Mark Beyer, Roxanne Edjali, Guido de Simoni, Daniel Betts.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-icon sky">🔍</div>
+          <div class="feature-content">
+            <h4>Forrester: Dev Experience & AI</h4>
+            <p>Analysts covering developer experience and AI infrastructure are the natural audience. The "AI-Augmented Developer Experience" coverage area is closest. Key names: Ted Schadler, Kate Leggett, Chris Gardner, Diego Lo Giudice, Andrew Cornwall.</p>
+          </div>
+        </div>
+
+        <p style="font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-2); margin: 20px 0 12px; padding-top: 16px; border-top: 1px solid var(--border);">Other analysts to consider</p>
+
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-icon amber">📰</div>
+          <div class="feature-content">
+            <h4>IDC: AI Infrastructure</h4>
+            <p>IDC's AI infrastructure coverage is broader and faster-moving than Gartner or Forrester — a good place to secure first named mentions before the larger firms move. IDC also tends to be more receptive to emerging categories backed by strong PLG data.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-icon green">💻</div>
+          <div class="feature-content">
+            <h4>RedMonk: Developer-first analyst coverage</h4>
+            <p>RedMonk focuses specifically on developer adoption and the intersection of community and enterprise. Their influence with engineering leaders and open-source communities makes them a high-value early target — particularly given Mintlify's PLG roots and developer brand.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0; border-bottom: none;">
+          <div class="feature-icon mint">🏦</div>
+          <div class="feature-content">
+            <h4>VC research arms (a16z, Sequoia, Coatue)</h4>
+            <p>Venture research teams at firms like a16z, Sequoia, and Coatue increasingly shape enterprise buying conversations through published market maps and category reports. With a16z already as an investor, their research arm is a natural channel for establishing the AI knowledge infrastructure narrative with the buyer audience they influence.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AR Relationship Strategy + Right Now: full width, side by side -->
+  <div class="two-col" style="gap: 16px; margin-top: 32px;">
+        <div class="card card-accent-mint">
+          <h3 style="font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(124,58,237,0.2);">Strategy for the most important part of AR: establishing relationships</h3>
+          <ul style="padding-left: 0; list-style: none;">
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; font-weight: 700; flex-shrink: 0;">01</span>Identify key analysts and review the list with Gartner and Forrester account reps to validate relevance and coverage areas before outreach</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; font-weight: 700; flex-shrink: 0;">02</span>Rank analysts by relevance and identify applicable upcoming research projects — brief those whose research aligns most closely first</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; font-weight: 700; flex-shrink: 0;">03</span>Build a prioritized cadence of briefings and inquiries with room for spontaneous, timely inquiries (e.g. if a competitor is acquired or a major market event occurs)</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; font-weight: 700; flex-shrink: 0;">04</span>Set up an analyst newsletter covering key feature updates, customer case studies, significant wins, growth stats (YoY growth, retention records), and leadership or funding signals that indicate positive momentum</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: none; font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; font-weight: 700; flex-shrink: 0;">05</span>When relationship signals are strong, schedule an analyst day — an immersive session with product demos, customer introductions, and executive vision presentation</li>
+          </ul>
+        </div>
+
+        <div class="card card-accent-green">
+          <h3 style="font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(74,222,128,0.2);">What we should be doing right now to prepare</h3>
+          <ul style="padding-left: 0; list-style: none;">
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--green); font-weight: 700; flex-shrink: 0;">→</span>Actively solicit Gartner Peer Reviews from existing customers to build the listing that analysts reference when buyers ask about the space</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--green); font-weight: 700; flex-shrink: 0;">→</span>Have a tight, current competitor analysis and SWOT ready — analysts ask pointed questions and being caught unprepared on competitive positioning undermines credibility</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--green); font-weight: 700; flex-shrink: 0;">→</span>Be able to articulate not just the current state of Mintlify but the future vision for defining the space — analysts invest in trajectories, not snapshots</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--green); font-weight: 700; flex-shrink: 0;">→</span>Secure executive buy-in — analysts want to brief and be briefed by founders and C-suite, not just PMM. Executive participation signals that the category narrative is a company priority</li>
+            <li style="display: flex; gap: 10px; padding: 10px 0; border-bottom: none; font-size: 14px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--green); font-weight: 700; flex-shrink: 0;">→</span>Use and define the term "Knowledge Infrastructure" at every opportunity — in product copy, blog posts, press releases, sales decks, and analyst briefings. Consistent repetition is how vocabulary becomes category</li>
+          </ul>
+        </div>
+      </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION 2: CAPTURE INTEREST -->
+<section id="capture">
+  <div class="section-header">
+    <div class="section-number">02</div>
+    <div class="section-title-block">
+      <h2>Capture interest</h2>
+      <p>How Product Marketing collaborates with Product, Demand, and Sales to convert market movement into pipeline.</p>
+    </div>
+  </div>
+
+  <!-- Launch -->
+  <div style="margin-bottom: 64px;">
+    <p class="sub-header">Launch</p>
+    <p style="font-size: 15px; color: var(--text-2); line-height: 1.7; max-width: 760px; margin-bottom: 32px;">Product Marketing acts as the central point for launch operations — establishing sustainable, cross-functional processes and tiered checklists for Tier 1, 2, and 3 launches. Below is how that partnership plays out across each team.</p>
+
+    <div class="grid-3" style="gap: 16px; align-items: start;">
+
+      <!-- Product col -->
+      <div class="card card-accent-mint" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(124,58,237,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--mint-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">🔧</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">Product</strong>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Product feedback loop</h4>
+            <p>Attend sprint reviews and partner with product management to powerfully communicate how new features translate into customer benefits. Synthesize market research, analyst insights, and customer feedback to inform user stories, features, and new products.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Thought leadership</h4>
+            <p>By understanding the vision of executive and product leadership, develop thought leadership that captures the attention of CPOs, VPs of Engineering, CTOs, and Product Ops — a highly effective tool at the launch moment.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Education</h4>
+            <p>With input from the product team, create how-tos, proprietary research, and other assets that capture tech buyer interest and establish Mintlify's credibility in the space.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>User proof points</h4>
+            <p>Identify beta users who can add credibility to launches with quotes, testimonials, event and webinar participation, analyst references, and case studies.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0; border-bottom: none;">
+          <div class="feature-content">
+            <h4>Analyst relations</h4>
+            <p>Senior product leadership participation in analyst launch briefings adds significant credibility — especially when we can demonstrate a compelling long-term vision for the category.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demand col -->
+      <div class="card card-accent-sky" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(56,189,248,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--sky-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">📣</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">Demand</strong>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Messaging frameworks</h4>
+            <p>Provide a launch messaging framework that translates new features into user benefits — a blueprint for all related inbound and outbound demand gen across the funnel.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Strategic partnership</h4>
+            <p>Partner on campaigns and channels to promote thought leadership and education tied to the launch, ensuring consistent narrative across every touchpoint.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Hands-on execution</h4>
+            <p>Write launch announcements, social media, press releases, persona and funnel-based emails, and blog posts. Or act as a timely reviewer on Demand-generated materials — whatever the team determines will create the biggest moment.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Video &amp; webinar production</h4>
+            <p>Produce prospect-facing webinars or videos focused on the benefits of new functionality — ideally featuring a beta customer. Produce separate customer-facing content to ensure existing users understand new features and enterprise value.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Website alignment</h4>
+            <p>Determine need for website changes — homepage splash for major updates, targeted content changes on product pages for incremental launches.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0; border-bottom: none;">
+          <div class="feature-content">
+            <h4>External updates</h4>
+            <p>Ensure external sites like G2 and Gartner Peer Reviews reflect the most up-to-date product functionality — these sites generate inbound demand and directly influence enterprise buyers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales col -->
+      <div class="card card-accent-amber" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(251,191,36,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--amber-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">💼</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">Sales</strong>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Preparation</h4>
+            <p>Sales training covering business benefits of new features, competitive analysis with talking points, objection handling, and sales messaging frameworks — calibrated to launch tier.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Quick references</h4>
+            <p>Easy-to-use summary materials that AEs can reach for instantly in the heat of a deal — competitive snapshot, top objections, key proof points. See examples below.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Sales playbook</h4>
+            <p>Robust guidance on sales actions along with product briefs for TOFU and BOFU. Email messaging for sequences at different stages of the sales cycle, ready to drop into CRM.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Post-sales</h4>
+            <p>Customer Success training, assets, and playbooks to position new features for expansion, retention, and upsell — especially where there are opportunities to move from departmental to enterprise solutions.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0; border-bottom: none;">
+          <div class="feature-content">
+            <h4>In-person support</h4>
+            <p>Join sales calls to answer business-level questions about new capabilities or give brief presentations and demos where the deal warrants it.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Campaigns -->
+  <div style="margin-bottom: 64px;">
+    <p class="sub-header">Campaigns</p>
+    <p style="font-size: 15px; color: var(--text-2); line-height: 1.7; max-width: 760px; margin-bottom: 32px;">As Mintlify complements successful PLG with an enterprise focus, Product Marketing leads the way in sharpening messaging, refining personas, and identifying promising market segments for campaign execution.</p>
+
+    <div class="grid-3" style="gap: 16px; align-items: start;">
+
+      <!-- Product col -->
+      <div class="card card-accent-mint" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(124,58,237,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--mint-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">🔧</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">Product</strong>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Validation</h4>
+            <p>Partner with PM to validate technical accuracy, confirm value propositions, and identify customer proof points that anchor campaign claims in real evidence.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Data</h4>
+            <p>Gather user and product data that can support campaign claims — average time a process takes, how many users run a given workflow, performance benchmarks — and translate them into compelling market-facing proof.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0; border-bottom: none;">
+          <div class="feature-content">
+            <h4>Primary source material</h4>
+            <p>Internal data can generate the "State of the Industry" reports and original research that form the backbone of a whole campaign — spanning social, blog posts, webinar presentations, and more. Mintlify's traffic data is uniquely valuable here.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demand col -->
+      <div class="card card-accent-sky" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(56,189,248,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--sky-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">📣</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">Demand</strong>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>End-to-end campaign support</h4>
+            <p>Whether initiated by Demand, Marketing Leadership, or Product Marketing — provide and review the messaging framework, participate in creation of inbound and outbound content across the full funnel, help secure expert voices (customers, analysts, internal SMEs) for webinars and events, and refine personas and target markets.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0; border-bottom: none;">
+          <div class="feature-content">
+            <h4>Identify opportunities</h4>
+            <p>Brainstorm and submit proposals for campaigns that will open enterprise opportunities — grounded in interactions with customers, analysts, and findings from sales call analysis and competitive research.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales col -->
+      <div class="card card-accent-amber" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(251,191,36,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--amber-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">💼</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">Sales</strong>
+        </div>
+        <div class="feature-row" style="padding: 12px 0;">
+          <div class="feature-content">
+            <h4>Sales activation</h4>
+            <p>Provide an overview of campaign positioning, updated objection handling, and new content — so AEs can activate the campaign narrative in their outreach from day one.</p>
+          </div>
+        </div>
+        <div class="feature-row" style="padding: 12px 0; border-bottom: none;">
+          <div class="feature-content">
+            <h4>Robust campaign playbook</h4>
+            <p>Deliver a full campaign playbook including: campaign overview (personas targeted, messaging, channels, assets); complete product and sales messaging frameworks; competitive intel table; assets tagged by stage, company size, and target market; and email templates integrated with CRM sequencing. Support with in-person attendance at customer meetings and events where high-value deals are at stake.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Examples -->
+  <div>
+    <p class="sub-header">Examples of sales enablement in practice</p>
+    <p style="font-size: 15px; color: var(--text-2); line-height: 1.7; max-width: 760px; margin-bottom: 32px;">The following are real examples of sales enablement materials created in a previous role at Aravo, illustrating the type of tight, deal-ready content Product Marketing should own at Mintlify.</p>
+
+    <!-- Example 1: full width -->
+    <div class="callout" style="margin-bottom: 24px;">
+      <strong>Example 1 · Sales messaging framework</strong><br/>
+      A cheat-sheet-style messaging framework delivered to Sales at Aravo when a new Information Security capability launched. Designed as a refresher within a broader training context — fast to scan, easy to use in a live deal.
+    </div>
+
+    <!-- Graphic: Example 1 sales messaging framework — HTML recreation -->
+    <div style="margin-bottom: 24px;">
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;">
+
+        <!-- Title -->
+        <div style="padding: 20px 28px 16px; border-bottom: 1px solid var(--border);">
+          <h3 style="font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.01em;">Sales messaging for Information Security</h3>
+        </div>
+
+        <!-- Row 1: Before / After / Requirements -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border);">
+          <div style="padding: 18px 20px; border-right: 1px solid var(--border);">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose); margin-bottom: 12px; font-weight: 600;">Before Scenario</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--rose); flex-shrink: 0; margin-top: 2px;">•</span>Manually scoping, distributing, and tracking SIG questionnaires was complicated, time consuming, and inefficient</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--rose); flex-shrink: 0; margin-top: 2px;">•</span>Reporting on overall information security risk was difficult due to the need to compile multiple spreadsheets</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--rose); flex-shrink: 0; margin-top: 2px;">•</span>No centralized view of overall information security risk to ensure that standards and controls are adhered to</li>
+            </ul>
+            <p style="font-size: 12px; color: var(--rose); font-style: italic; margin-top: 12px; line-height: 1.5;">No visibility into overall 3<sup>rd</sup> party infosec risk</p>
+          </div>
+          <div style="padding: 18px 20px; border-right: 1px solid var(--border);">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; font-weight: 600;">After Scenario</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--green); flex-shrink: 0; margin-top: 2px;">•</span>Risk expert can quickly and easily scope the appropriate assessment using SIG Core and/or Lite</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--green); flex-shrink: 0; margin-top: 2px;">•</span>Automated workflow manages associated business processes, reducing manual processes</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--green); flex-shrink: 0; margin-top: 2px;">•</span>Centralized view of infosec risk with pre-configured reporting and dashboards</li>
+            </ul>
+            <p style="font-size: 12px; color: var(--green); font-style: italic; margin-top: 12px; line-height: 1.5;">Complete visibility into 3<sup>rd</sup> party information management risk across the enterprise</p>
+          </div>
+          <div style="padding: 18px 20px;">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sky); margin-bottom: 12px; font-weight: 600;">Requirements</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--sky); flex-shrink: 0; margin-top: 2px;">•</span>Adhere to industry-standard standard for information security assessments (Shared Assessments SIG)</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--sky); flex-shrink: 0; margin-top: 2px;">•</span>Identify and mitigate potential infosec risks without creating undue burden on vendors or employees</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--sky); flex-shrink: 0; margin-top: 2px;">•</span>Demonstrate appropriate levels of due diligence and reporting to senior management, the board, and auditors</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Row 2: Negative / Positive / Proof Points -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid var(--border);">
+          <div style="padding: 18px 20px; border-right: 1px solid var(--border); background: rgba(248,113,113,0.03);">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose); margin-bottom: 12px; font-weight: 600;">Negative Consequences</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--rose); flex-shrink: 0; margin-top: 2px;">•</span>Reputational risk has cost publicly traded companies more than $180 billion in the past several years</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--rose); flex-shrink: 0; margin-top: 2px;">•</span>The average cost of a data breach is $4 million (Ponemon Institute)</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--rose); flex-shrink: 0; margin-top: 2px;">•</span>87% of consumers will stop doing business with a company they don't trust with their data (PWC)</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--rose); flex-shrink: 0; margin-top: 2px;">•</span>EU GDPR, FTC, CFPB, various states, and other authorities have issued fines to organizations that failed to protect customer/employee data from third party breaches</li>
+            </ul>
+          </div>
+          <div style="padding: 18px 20px; border-right: 1px solid var(--border); background: rgba(74,222,128,0.03);">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; font-weight: 600;">Positive Business Impact</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--green); flex-shrink: 0; margin-top: 2px;">•</span>Improve decision making by identifying potential risks associated with vendors that access customer/employee data</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--green); flex-shrink: 0; margin-top: 2px;">•</span>Reduce the amount of time and effort it takes to confidently onboard a new vendor</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--green); flex-shrink: 0; margin-top: 2px;">•</span>Protect and preserve brand/reputation and shareholder value</li>
+            </ul>
+          </div>
+          <div style="padding: 18px 20px; background: rgba(251,191,36,0.03);">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; font-weight: 600;">Proof Points</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--amber); flex-shrink: 0; margin-top: 2px;">•</span>Target paid out more than $18.5 million in fines to 47 states and DC for the 2013 breach caused by an HVAC vendor (total costs estimated at $200 million)</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--amber); flex-shrink: 0; margin-top: 2px;">•</span>A third-party data breach at Evite (2019) exposed data of up to 100 million users, creating GDPR exposure for every organization that used the service</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--amber); flex-shrink: 0; margin-top: 2px;">•</span>American Medical Collection Agency (AMCA) and Quest Diagnostics are facing millions in lawsuits and potential HIPAA fines after data related to 12 million customers may have been exposed</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Row 3: Discovery Questions / Metrics -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr;">
+          <div style="padding: 18px 20px; border-right: 1px solid var(--border);">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #a78bfa; margin-bottom: 12px; font-weight: 600;">Discovery Questions</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 3px 0; display: flex; gap: 7px;"><span style="color: #a78bfa; flex-shrink: 0; margin-top: 2px;">•</span>What is your role in assessing IT vendors? (CISO, IT security, etc.)</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 3px 0; display: flex; gap: 7px;"><span style="color: #a78bfa; flex-shrink: 0; margin-top: 2px;">•</span>What is your current process for assessing IT vendor risk?</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 3px 0; display: flex; gap: 7px;"><span style="color: #a78bfa; flex-shrink: 0; margin-top: 2px;">•</span>Do you currently use the SIG to assess vendors?</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 3px 0; display: flex; gap: 7px;"><span style="color: #a78bfa; flex-shrink: 0; margin-top: 2px;">•</span>How long would it take you to assess a third party's information security risk?</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 3px 0; display: flex; gap: 7px;"><span style="color: #a78bfa; flex-shrink: 0; margin-top: 2px;">•</span>How long would it take you to report on the inherent information security risk for your entire third-party portfolio?</li>
+            </ul>
+          </div>
+          <div style="padding: 18px 20px;">
+            <p style="font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; font-weight: 600;">Metrics</p>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--amber); flex-shrink: 0; margin-top: 2px;">•</span>63% of data breaches are caused by actions of a third party (Ponemon Institute)</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--amber); flex-shrink: 0; margin-top: 2px;">•</span>The number of confirmed data breaches caused by third parties increased 17% between 2017 and 2018 (Forrester)</li>
+              <li style="font-size: 12px; color: var(--text-2); line-height: 1.6; padding: 4px 0; display: flex; gap: 7px;"><span style="color: var(--amber); flex-shrink: 0; margin-top: 2px;">•</span>66% of organizations have experienced a third-party data breach in the past year (Ponemon)</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Example 2: full width -->
+    <div class="callout" style="margin-bottom: 24px;">
+      <strong>Example 2 · Competitive quick reference</strong><br/>
+      A rapid-response competitive overview created when market movement around a third-party risk management standard (the SIG questionnaire) created immediate prospect questions. AEs needed to know exactly how Aravo addressed the change versus every named competitor.
+    </div>
+
+    <!-- Competitive table -->
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div style="padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <p style="font-size: 12px; font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 4px;">Sample · Competitive Quick Reference</p>
+          <h3 style="font-size: 15px;">SIG Functionality Competitive Overview — Aravo</h3>
+        </div>
+        <span class="badge badge-amber">Sales reference</span>
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px; min-width: 860px;">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border); white-space: nowrap;">Company</th>
+              <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border); white-space: nowrap;">Gartner Score</th>
+              <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border);">Target Market</th>
+              <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border);">Competitive Differentiator</th>
+              <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border);">SIG Functionality</th>
+              <th style="text-align: left; padding: 12px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border);">Aravo Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: rgba(124,58,237,0.04);">
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: #a78bfa; vertical-align: top;">Lockpath</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.78</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Healthcare, finance</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Configurability, audit management</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Access to SIG library; ability to modify for own survey designs (Core and Lite)</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Won't be able to expand beyond infosec</td>
+            </tr>
+            <tr>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">Galvanize (Rsam)</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.78</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Large, MSE</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Global reach</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Can pull from spreadsheets, link similar questions, includes SIG but not dynamic</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Question linking has questionable defensibility</td>
+            </tr>
+            <tr style="background: rgba(124,58,237,0.04);">
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">Prevalent</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.75</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Mid-market to enterprise B2B</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Shared vendor assessment exchanges and threat monitoring</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">SIG-based assessments; maps controls from SIG to internal controls, creates summary finding report</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Haven't encountered control mapping as a customer requirement</td>
+            </tr>
+            <tr>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">MetricStream</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.74</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Highly regulated industries</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">IRM platform</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">SIG library out of the box with custom configuration</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Gartner Peer Reviews cite difficulty to configure and integrate</td>
+            </tr>
+            <tr style="background: rgba(124,58,237,0.04);">
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">Ncontracts</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.72</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Banks &amp; credit unions; expanding to healthcare</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">In-house legal &amp; regulatory consulting</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">No library of surveys</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Would require significant overhead and likely a consulting upsell to implement surveys</td>
+            </tr>
+            <tr>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">RSA</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.70</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Large enterprises, mature VRM</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Part of IRM platform</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Survey library includes SIG</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Hard to configure; requires significant training investment</td>
+            </tr>
+            <tr style="background: rgba(124,58,237,0.04);">
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">Quantivate</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.69</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Small and mid-size banks</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Can be separate from broader IRM platform</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Limited functionality</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Limited functionality across the board</td>
+            </tr>
+            <tr>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">SAI Global</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.69</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Mid-to-large enterprise, regulated industries, government</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Standards assurance</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Library of 1,000+ controls and compliance sets; maps ISO controls back to SIG</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Haven't encountered control mapping as a customer requirement</td>
+            </tr>
+            <tr style="background: rgba(124,58,237,0.04);">
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); font-weight: 700; color: var(--text); vertical-align: top;">Allgress</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">3.52</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Healthcare, financial services, retail; infosec and compliance focus</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">Integrates with service desk; ties risks to contracts</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top;">SIG mapping is an extra module; links to an older standard</td>
+              <td style="padding: 13px 16px; border-bottom: 1px solid var(--border); color: var(--green); vertical-align: top; font-size: 12px;">Sold within IRM context; additional cost for SIG mapping</td>
+            </tr>
+            <tr>
+              <td style="padding: 13px 16px; font-weight: 700; color: var(--text); vertical-align: top;">Optiv/Evantix</td>
+              <td style="padding: 13px 16px; color: var(--text-2); vertical-align: top;">3.45</td>
+              <td style="padding: 13px 16px; color: var(--text-2); vertical-align: top;">Financial services, healthcare, tech &amp; media, energy</td>
+              <td style="padding: 13px 16px; color: var(--text-2); vertical-align: top;">Assessments as a service</td>
+              <td style="padding: 13px 16px; color: var(--text-2); vertical-align: top;">Promotes use of SIG</td>
+              <td style="padding: 13px 16px; color: var(--green); vertical-align: top; font-size: 12px;">TPRM/infosec is not their core competency</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION 3: SALES ENABLEMENT -->
+<section id="sales">
+  <div class="section-header">
+    <div class="section-number">03</div>
+    <div class="section-title-block">
+      <h2>Sales enablement</h2>
+      <p>Positioning, objection handling, and new content accelerating the transition from PLG to enterprise sales.</p>
+    </div>
+  </div>
+
+  <!-- Core positioning -->
+  <div style="margin-bottom: 56px;">
+    <p class="sub-header">Core positioning statement</p>
+    <div class="positioning-box">
+      <blockquote>
+        Mintlify is the AI knowledge infrastructure platform that makes your product knowledge machine-consumable — for the developers who build on it, the AI agents that evaluate it, and the enterprises that depend on it.
+      </blockquote>
+      <div class="source">For: VP Engineering, CTO, CPO, Director of Developer Experience at enterprise organizations</div>
+    </div>
+  </div>
+
+  <!-- Sales-Marketing-PMM Partnership -->
+  <div style="margin-bottom: 56px;">
+    <p class="sub-header">The Sales–Marketing–Product Marketing partnership</p>
+    <p style="font-size: 15px; color: var(--text-2); line-height: 1.7; max-width: 760px; margin-bottom: 32px;">The previous section outlines specific activities to enable Sales throughout launch and campaign execution, but the ICP transition to enterprise will require additional training and materials developed in tight collaboration with Sales and Marketing leadership — with shared agreement on content, responsibilities, and methods.</p>
+    <p style="font-size: 15px; color: var(--text-2); line-height: 1.7; max-width: 760px; margin-bottom: 32px;">While Product Marketing assumes responsibility for delivering and maintaining these assets, the team should stay open to what Sales actually needs — prioritizing the assets and activities that will most directly help AEs achieve their goals.</p>
+
+    <div class="two-col" style="gap: 20px;">
+      <div class="card card-accent-mint">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(124,58,237,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--mint-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">🌐</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">External assets</strong>
+        </div>
+        <ul style="list-style: none; padding: 0;">
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Thought leadership (written or video) for internal campaigns and pitches to media</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Educational content on the industry — e.g. what makes a documentation repository AI agent-ready</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Reports and studies using operational data and/or user questionnaires — repurposable across social, blog, events, and more</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Product data sheets appropriate to various ICPs, vertical markets, or sales cycle stages</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Customizable email templates</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Case studies</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Sales presentations</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: #a78bfa; flex-shrink: 0;">→</span>Licensed analyst reports</li>
+        </ul>
+      </div>
+
+      <div class="card card-accent-sky">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(56,189,248,0.2);">
+          <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--sky-soft); display: flex; align-items: center; justify-content: center; font-size: 16px;">🔒</div>
+          <strong style="font-size: 15px; letter-spacing: -0.01em;">Internal assets</strong>
+        </div>
+        <ul style="list-style: none; padding: 0;">
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--sky); flex-shrink: 0;">→</span>Stats cheat sheets — similar to a Wall of Love — where AEs can pull relevant proof points on demand (e.g. "50% of documentation users are AI")</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--sky); flex-shrink: 0;">→</span>Sales messaging frameworks</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--sky); flex-shrink: 0;">→</span>Competitive intelligence</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--sky); flex-shrink: 0;">→</span>Analyst reports for internal use only</li>
+          <li style="display: flex; gap: 10px; padding: 9px 0; font-size: 13px; color: var(--text-2); line-height: 1.6;"><span style="color: var(--sky); flex-shrink: 0;">→</span>Archived training materials</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PMM Responsibilities -->
+  <div style="margin-bottom: 56px;">
+    <p class="sub-header">Product Marketing responsibilities</p>
+    <p style="font-size: 15px; color: var(--text-2); line-height: 1.7; max-width: 760px; margin-bottom: 32px;">In addition to assets, Product Marketing enables Sales by staying embedded in the day-to-day realities of the sales motion.</p>
+    <div class="grid-3" style="gap: 16px;">
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">🤝</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Availability &amp; responsiveness</h3>
+        <p>Remain open and available to create new assets or participate in initiatives that will drive revenue. When a deal needs something, PMM moves quickly — not in the next sprint.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">🎤</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Field &amp; event support</h3>
+        <p>Support the Sales team at events and on sales calls — especially in the early enterprise motion where Product Marketing can help contextualize the broader category narrative for skeptical EPD buyers.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">📋</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Training &amp; updates</h3>
+        <p>Provide timely training and updates on new launches, market activity, campaigns, and anything else that impacts how Sales interacts with prospects or customers. No AE should be caught flat-footed by a market event PMM already knows about.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">👂</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Sales team presence</h3>
+        <p>Attend Sales team meetings regularly to understand where the team is encountering success or challenges — and use those insights to shape the next round of assets, positioning, and objection handling.</p>
+      </div>
+      <div class="card">
+        <div style="font-size: 24px; margin-bottom: 12px;">🔎</div>
+        <h3 style="font-size: 15px; margin-bottom: 8px;">Call monitoring</h3>
+        <p>Review AI sales call summaries to monitor objections AEs are encountering in the field. When a new pattern emerges, ship updated guidance within 48 hours — not in the next quarterly planning cycle.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ICP Matrix -->
+  <div style="margin-bottom: 56px;">
+    <p class="sub-header">ICP matrix</p>
+    <p style="font-size: 15px; color: var(--text-2); line-height: 1.7; max-width: 760px; margin-bottom: 32px;">As we align messaging to enterprise buyer responsibilities, training and playbooks will need to help Sales transition to these personas. The matrix below defines how each ICP experiences the problem — and how Mintlify speaks to it. Adoption of this framing will likely require active monitoring and reinforcement.</p>
+
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 13px; min-width: 900px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border-mid);">
+            <th style="text-align: left; padding: 14px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); width: 14%; background: var(--bg-raised);">Attribute</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #a78bfa; width: 21.5%; background: rgba(124,58,237,0.06);">CPO</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky); width: 21.5%;">VP of Engineering</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); width: 21.5%; background: rgba(251,191,36,0.04);">CTO</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); width: 21.5%;">Director of DevEx</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 14px 16px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); background: var(--bg-raised); vertical-align: top;">Core metric</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6; background: rgba(124,58,237,0.03);">Product velocity, time-to-market, feature adoption</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6;">Developer velocity, deployment frequency, retention</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6; background: rgba(251,191,36,0.02);">System reliability, security/compliance, TCO, CapEx/OpEx efficiency</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6;">Cognitive load, time-to-first-PR, documentation helpfulness, flow state, DORA metrics</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 14px 16px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); background: var(--bg-raised); vertical-align: top;">Main friction</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6; background: rgba(124,58,237,0.03);">"We are building the wrong things because context gets lost between product, design, and engineering."</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6;">"My engineers spend 20–30% of their week hunting down specs and legacy code context instead of writing code."</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6; background: rgba(251,191,36,0.02);">"AI code assistants are drowning us in unverified code, inflating our token costs, and introducing security and compliance risks."</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6;">"Our internal engineering knowledge is fractured across legacy wikis, Jira, and Slack. Developers spend hours playing archaeologist instead of building."</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 14px 16px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); background: var(--bg-raised); vertical-align: top;">Value proposition</td>
+            <td style="padding: 14px 16px; vertical-align: top; line-height: 1.6; background: rgba(124,58,237,0.03);"><strong style="color: #a78bfa; font-size: 13px;">Continuous context &amp; alignment.</strong><br/><span style="color: var(--text-2); font-size: 13px;">Eliminate the alignment gap. Ensure every designer and engineer builds with the full, up-to-date context of the product strategy and user feedback.</span></td>
+            <td style="padding: 14px 16px; vertical-align: top; line-height: 1.6;"><strong style="color: var(--sky); font-size: 13px;">Developer focus &amp; cognitive load reduction.</strong><br/><span style="color: var(--text-2); font-size: 13px;">Give engineers an instantaneous, accurate way to query documentation, codebases, and PRDs without interrupting peers.</span></td>
+            <td style="padding: 14px 16px; vertical-align: top; line-height: 1.6; background: rgba(251,191,36,0.02);"><strong style="color: var(--amber); font-size: 13px;">Structure and risk mitigation for enterprise AI.</strong><br/><span style="color: var(--text-2); font-size: 13px;">Maximize R&amp;D returns while ensuring data security and architectural integrity.</span></td>
+            <td style="padding: 14px 16px; vertical-align: top; line-height: 1.6;"><strong style="color: var(--green); font-size: 13px;">Eliminate the engineering search tax.</strong><br/><span style="color: var(--text-2); font-size: 13px;">Give developers a self-service, contextual knowledge platform that keeps them in their IDE and protects their flow state.</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); background: var(--bg-raised); vertical-align: top;">Key AI capability</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6; background: rgba(124,58,237,0.03);">Multi-source synthesis — connecting user research, Figma comments, PRDs, and roadmap data into a coherent knowledge base</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6;">Strict access control, repository indexing, source attribution (preventing hallucinations), and seamless integration with GitHub and Jira</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6; background: rgba(251,191,36,0.02);">Enterprise-grade RBAC compliance, VPC deployment, and zero data retention for model retraining</td>
+            <td style="padding: 14px 16px; color: var(--text-2); vertical-align: top; line-height: 1.6;">Deep repository and documentation parsing, precise source attribution, and semantic search inside developer workflows (Slack, IDE, CLI)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div style="margin-bottom: 48px;">
+    <p class="sub-header">Objection handling matrix</p>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table class="objection-table">
+        <thead>
+          <tr>
+            <th>Objection</th>
+            <th>What's behind it</th>
+            <th>The response</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>"We already use Confluence / Notion."</td>
+            <td style="color: var(--text-2); font-size: 13px;">Incumbent inertia; they haven't felt the AI-era pain yet.</td>
+            <td>"Confluence and Notion are built for humans finding information. They're not built for AI agents consuming it at scale. When a developer asks Claude how to use your API, Claude isn't reading Confluence — and if it is, it's paying a massive token tax on all that formatting noise. Mintlify is the layer that makes your knowledge machine-readable, wherever it currently lives."</td>
+          </tr>
+          <tr>
+            <td>"We built our own docs system / we have engineering resources."</td>
+            <td style="color: var(--text-2); font-size: 13px;">Not-invented-here, or genuine concern about migration effort.</td>
+            <td>"The teams that built their own docs infrastructure before Mintlify existed all made the same calculation: it's a docs site, how hard can it be? The ones who switched tell us they were spending 2–3 engineers maintaining infrastructure instead of shipping product. The question isn't 'can we build it' — it's 'should an engineering team be maintaining a docs platform in 2026 when AI knowledge infrastructure is becoming a strategic asset?'"</td>
+          </tr>
+          <tr>
+            <td>"We're not sure our team will actually keep docs updated."</td>
+            <td style="color: var(--text-2); font-size: 13px;">A legitimate fear — they've seen documentation decay before.</td>
+            <td>"That was the right concern for docs platforms. Mintlify's Workflows solve this differently: when your product changes, Mintlify drafts the documentation update automatically, flags it for review, and maintains the knowledge without requiring engineers to context-switch. The docs stay accurate because the system keeps them accurate, not because humans remember to."</td>
+          </tr>
+          <tr>
+            <td>"How is this different from GitBook / Readme?"</td>
+            <td style="color: var(--text-2); font-size: 13px;">Need a clear differentiator beyond aesthetics.</td>
+            <td>"GitBook and Readme are documentation publishers. Mintlify is knowledge infrastructure. That distinction matters because your docs are no longer just a website — they're the interface through which AI systems understand your product. Mintlify is the only platform built from the ground up to serve both humans browsing a site and AI agents consuming content programmatically. That's llms.txt, MCP server support, machine-readable Markdown exports, and self-updating content — none of which GitBook or Readme are architected to do."</td>
+          </tr>
+          <tr>
+            <td>"Security / compliance concerns for enterprise."</td>
+            <td style="color: var(--text-2); font-size: 13px;">Real requirement, not just a blocker tactic.</td>
+            <td>"Mintlify is SOC 2 Type II certified, in process for ISO 27001 and GDPR, and supports SAML-based SSO with granular access controls. We have dedicated enterprise migration support and white-glove onboarding. [Fidelity / AT&T / enterprise name] went through the same security review — here's the security one-pager and we can schedule a call with our security team directly."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Competitive positioning -->
+  <div style="margin-bottom: 48px;">
+    <p class="sub-header">Competitive positioning</p>
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Platform</th>
+            <th>AI-native</th>
+            <th>MCP / llms.txt</th>
+            <th>Self-updating docs</th>
+            <th>Developer-first</th>
+            <th>Enterprise-ready</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="mintlify-row">
+            <td>✦ Mintlify</td>
+            <td class="check-y">✓</td>
+            <td class="check-y">✓</td>
+            <td class="check-y">✓</td>
+            <td class="check-y">✓</td>
+            <td class="check-y">✓</td>
+          </tr>
+          <tr>
+            <td>GitBook</td>
+            <td class="check-p">Partial</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-p">Partial</td>
+            <td class="check-p">Partial</td>
+          </tr>
+          <tr>
+            <td>Readme</td>
+            <td class="check-p">Partial</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-y">✓</td>
+            <td class="check-p">Partial</td>
+          </tr>
+          <tr>
+            <td>Confluence</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-y">✓</td>
+          </tr>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-y">✓</td>
+          </tr>
+          <tr>
+            <td>Notion</td>
+            <td class="check-p">Partial</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-n">✗</td>
+            <td class="check-p">Partial</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size: 12px; color: var(--text-3); margin-top: 8px; font-family: 'DM Mono', monospace;">✓ Full support &nbsp;·&nbsp; Partial = limited or add-on &nbsp;·&nbsp; ✗ Not supported</p>
+  </div>
+
+  <!-- Sales enablement tools -->
+  <div>
+    <p class="sub-header">Sales enablement tools</p>
+
+    <div class="card card-accent-mint" style="margin-bottom: 0;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+        <h3 style="font-size: 16px;">Purpose-built sales enablement platform</h3>
+        <span class="badge badge-mint">Strategic investment</span>
+      </div>
+      <p style="font-size: 14px; color: var(--text-2); line-height: 1.7; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid rgba(124,58,237,0.2);">Enterprise EPD buyers are more skeptical and more influenced by educational and thought leadership content at the top of the funnel — but still require tightly written product content to make a final decision. Managing this asset ecosystem effectively requires a purpose-built enablement platform, such as Highspot, Seismic, or DocSend.</p>
+      <div class="grid-3" style="gap: 16px; margin-bottom: 20px;">
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #a78bfa;">Playbook activation</h4>
+          <p style="font-size: 13px; color: var(--text-2); line-height: 1.65;">Supports structured playbook delivery — AEs work through the right assets at the right stage automatically, rather than hunting for the latest version of a deck.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #a78bfa;">Smart asset surfacing</h4>
+          <p style="font-size: 13px; color: var(--text-2); line-height: 1.65;">AEs or Demand can quickly identify the right asset for any prospect based on company size, ICP, target market, product, or sales stage — without leaving CRM.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #a78bfa;">CRM integration</h4>
+          <p style="font-size: 13px; color: var(--text-2); line-height: 1.65;">Automates asset delivery to prospects and gives AEs access to the full content library from within the tools they already live in.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #a78bfa;">Prospect behavior data</h4>
+          <p style="font-size: 13px; color: var(--text-2); line-height: 1.65;">Tracks whether a prospect opened an asset, read or watched the whole thing, and shared it with a colleague — signal that fundamentally changes how AEs follow up.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #a78bfa;">Asset performance analytics</h4>
+          <p style="font-size: 13px; color: var(--text-2); line-height: 1.65;">Surfaces which assets are driving engagement and which aren't — keeping Product Marketing accountable and ensuring the library stays lean and effective.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #a78bfa;">Content governance</h4>
+          <p style="font-size: 13px; color: var(--text-2); line-height: 1.65;">Ensures AEs are always working from the most current content — no more outdated decks being sent to prospects because someone forgot to update a shared Drive folder.</p>
+        </div>
+      </div>
+      <p style="font-size: 12px; color: var(--text-3); line-height: 1.6; padding-top: 16px; border-top: 1px solid rgba(124,58,237,0.2);"><strong style="color: var(--text-2);">Note:</strong> I have personally implemented and administered Highspot at multiple companies and can lead this effort from evaluation through rollout.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- CLOSING: 30-60-90 -->
+<section style="padding: 100px 40px;" id="plan">
+  <div class="section-header">
+    <div class="section-number">→</div>
+    <div class="section-title-block">
+      <h2>30 · 60 · 90</h2>
+      <p>How the three pillars translate into concrete action in the first quarter.</p>
+    </div>
+  </div>
+
+  <div class="grid-3" style="gap: 16px; align-items: start;">
+
+    <!-- 30 days -->
+    <div class="card card-accent-mint">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(124,58,237,0.2);">
+        <div>
+          <div style="font-family: 'Instrument Serif', serif; font-size: 42px; font-weight: 400; line-height: 1; color: #a78bfa;">30</div>
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-top: 2px;">days · Listen &amp; lay foundations</div>
+        </div>
+      </div>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #a78bfa; margin-bottom: 10px;">Category Creation</p>
+      <ul style="list-style: none; padding: 0; margin-bottom: 18px;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Schedule first briefings with Gartner and Forrester account reps; identify and rank the priority analyst list</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Audit existing content and assets for use of "Knowledge Infrastructure" language; establish a baseline</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Begin soliciting Gartner Peer Reviews from existing customers</li>
+      </ul>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #a78bfa; margin-bottom: 10px;">Capture Interest</p>
+      <ul style="list-style: none; padding: 0; margin-bottom: 18px;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Attend sprint reviews and meet with Product and Demand counterparts; understand current roadmap and active campaigns</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Identify the next product launch and assess tier; begin positioning work</li>
+      </ul>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #a78bfa; margin-bottom: 10px;">Sales Enablement</p>
+      <ul style="list-style: none; padding: 0;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Meet with Sales leadership and AEs; audit existing enablement assets and identify the highest-priority gaps</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Review AI call summaries to understand current objection patterns before writing a single word of copy</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: #a78bfa; flex-shrink: 0; font-weight: 700;">→</span>Deliver first ICP matrix draft and sales messaging framework to Sales for review and feedback</li>
+      </ul>
+    </div>
+
+    <!-- 60 days -->
+    <div class="card card-accent-sky">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(56,189,248,0.2);">
+        <div>
+          <div style="font-family: 'Instrument Serif', serif; font-size: 42px; font-weight: 400; line-height: 1; color: var(--sky);">60</div>
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-top: 2px;">days · Build &amp; activate</div>
+        </div>
+      </div>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky); margin-bottom: 10px;">Category Creation</p>
+      <ul style="list-style: none; padding: 0; margin-bottom: 18px;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Conduct first analyst briefings on the category vision; brief on AI traffic data and Mintlify's position as the system layer</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Publish "State of AI Knowledge Infrastructure" report outline; begin data gathering with Product</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Secure first tier-1 media placement using "AI knowledge infrastructure" framing; amplify with SEO/AEO</li>
+      </ul>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky); margin-bottom: 10px;">Capture Interest</p>
+      <ul style="list-style: none; padding: 0; margin-bottom: 18px;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Execute first product launch under new tiered framework; run full Product–Demand–Sales launch motion</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Develop first enterprise-focused campaign brief; align with Demand on targeting, channels, and timeline</li>
+      </ul>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky); margin-bottom: 10px;">Sales Enablement</p>
+      <ul style="list-style: none; padding: 0;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Deliver finalized objection handling matrix, competitive intel table, and enterprise external assets to Sales</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Run first ICP training session with Sales team on CPO/VP Eng/CTO/DevEx personas and enterprise messaging</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--sky); flex-shrink: 0; font-weight: 700;">→</span>Evaluate and recommend a sales enablement platform (Highspot, Seismic, or DocSend); begin stakeholder alignment</li>
+      </ul>
+    </div>
+
+    <!-- 90 days -->
+    <div class="card card-accent-green">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(74,222,128,0.2);">
+        <div>
+          <div style="font-family: 'Instrument Serif', serif; font-size: 42px; font-weight: 400; line-height: 1; color: var(--green);">90</div>
+          <div style="font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-top: 2px;">days · Measure &amp; compound</div>
+        </div>
+      </div>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); margin-bottom: 10px;">Category Creation</p>
+      <ul style="list-style: none; padding: 0; margin-bottom: 18px;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Publish "State of AI Knowledge Infrastructure" report; distribute to analysts, press, and existing customer base</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Establish quarterly analyst briefing cadence and launch analyst newsletter covering product, growth, and customer wins</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Track: 5+ tier-1 media pieces using "AI knowledge infrastructure," Gartner Peer Insights listing achieved, first analyst conversation documented</li>
+      </ul>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); margin-bottom: 10px;">Capture Interest</p>
+      <ul style="list-style: none; padding: 0; margin-bottom: 18px;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Launch first enterprise campaign end-to-end with Demand; capture results against baseline and iterate messaging</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Identify the next launch and next campaign in the pipeline; cross-functional processes are running, not being built from scratch each time</li>
+      </ul>
+
+      <p style="font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); margin-bottom: 10px;">Sales Enablement</p>
+      <ul style="list-style: none; padding: 0;">
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Full asset library in place: external and internal assets tagged, accessible, and current — ideally inside a chosen enablement platform</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Completed second ICP training cycle; Sales team comfortable with enterprise persona messaging and objection responses</li>
+        <li style="display: flex; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--text-2); line-height: 1.5;"><span style="color: var(--green); flex-shrink: 0; font-weight: 700;">→</span>Track: objection patterns shifting in call summaries, AE usage of new assets, and first enterprise deals influenced by updated messaging</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <h3>Jackie Risley</h3>
+    <p>PMM Take-Home Assignment · Prepared for Mintlify</p>
+  </div>
+  <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+    <a href="mailto:jacqueline.risley@gmail.com" style="display: flex; align-items: center; gap: 7px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-3); text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-3)'">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 4.5L7 8.5L13 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      jacqueline.risley@gmail.com
+    </a>
+    <a href="https://www.linkedin.com/in/jackierisley" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 7px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-3); text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-3)'">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M4 6v4M4 4.5v.01" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M7 10V7.5C7 6.7 7.7 6 8.5 6S10 6.7 10 7.5V10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      linkedin.com/in/jackierisley
+    </a>
+  </div>
+</footer>
+
+<script>
+  // Active nav
+  function setActive(el) {
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Intersection observer for nav
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => {
+          l.classList.remove('active');
+          if (l.getAttribute('href') === '#' + entry.target.id) {
+            l.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
